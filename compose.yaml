@@ -1,0 +1,32 @@
+services:
+  devbox:
+    build:
+      context: .
+    image: gpu-devbox:local
+    container_name: gpu-devbox
+    hostname: ${TS_HOSTNAME:-gpu-devbox}
+    restart: unless-stopped
+    env_file:
+      - .env
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - tailscale-state:/var/lib/tailscale
+      - ssh-host-keys:/etc/ssh
+      - ./workspace:/workspace
+      - ./data:/data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  tailscale-state:
+  ssh-host-keys:
+
