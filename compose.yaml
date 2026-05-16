@@ -6,6 +6,8 @@ services:
     container_name: gpu-devbox
     hostname: ${TS_HOSTNAME:-gpu-devbox}
     restart: unless-stopped
+    ipc: host
+    shm_size: "24gb"
     env_file:
       - .env
     cap_add:
@@ -29,4 +31,3 @@ services:
 volumes:
   tailscale-state:
   ssh-host-keys:
-
